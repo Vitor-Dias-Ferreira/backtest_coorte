@@ -1,8 +1,9 @@
 
 # Nome dos envolvidos:
 # Vitor Dias Ferreira
-# Adryann Henrique Oliveira Olivatti 
 # Mariana Vitoria Martins de Miranda
+# Adryann Henrique Oliveira Olivatti 
+
 ------------------------
 # Projeto: Backtesting Coorte
 
