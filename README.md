@@ -5,7 +5,7 @@
 # Adryann Henrique Oliveira Olivatti 
 
 ------------------------
-# Projeto: Backtesting Coorte
+# Projeto: Backtest Coorte
 
 O **Backtesting Coorte** é uma aplicação interativa criada com **Streamlit**, que permite aos usuários realizar simulações de **backtesting de investimentos**. Através desta aplicação, o usuário pode simular a evolução do patrimônio de uma carteira de investimentos, utilizando aportes mensais fixos e dados históricos de preços de ativos financeiros. Os dados podem ser fornecidos por meio de **PDFs**, **arquivos CSV/Excel/TXT**, ou inseridos manualmente através de um formulário.
 
@@ -92,3 +92,10 @@ Se não der certo , tente:
 python -m streamlit run app.py
 se não der certo , tente:
 streamlit run app.py --server.port 8504
+
+
+-----
+
+### Link para video de apresentação:
+
+https://youtu.be/UNb9Th7K70s?si=kd9iOSqOcP5EvGiX
