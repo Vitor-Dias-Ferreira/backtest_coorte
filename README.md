@@ -2,7 +2,8 @@
 # Nome dos envolvidos:
 # Vitor Dias Ferreira
 # Adryann Henrique Oliveira Olivatti 
-# Mariana Vit ́oria Martins de Miranda------------------------
+# Mariana Vitoria Martins de Miranda
+------------------------
 # Projeto: Backtesting Coorte
 
 O **Backtesting Coorte** é uma aplicação interativa criada com **Streamlit**, que permite aos usuários realizar simulações de **backtesting de investimentos**. Através desta aplicação, o usuário pode simular a evolução do patrimônio de uma carteira de investimentos, utilizando aportes mensais fixos e dados históricos de preços de ativos financeiros. Os dados podem ser fornecidos por meio de **PDFs**, **arquivos CSV/Excel/TXT**, ou inseridos manualmente através de um formulário.
