@@ -1,101 +1,76 @@
+# Monthly Investment Backtest
 
-# Nome dos envolvidos:
-# Vitor Dias Ferreira
-# Mariana Vitoria Martins de Miranda
-# Adryann Henrique Oliveira Olivatti 
+An interactive Streamlit app that simulates fixed monthly investments in a stock using historical Yahoo Finance prices. Enter a ticker, a period, and a monthly amount, and the app shows how the portfolio would have grown.
 
-------------------------
-# Projeto: Backtest Coorte
+> **Language note:** this was a university team project in Brazil, so the app's interface and code are in Portuguese.
 
-O **Backtesting Coorte** é uma aplicação interativa criada com **Streamlit**, que permite aos usuários realizar simulações de **backtesting de investimentos**. Através desta aplicação, o usuário pode simular a evolução do patrimônio de uma carteira de investimentos, utilizando aportes mensais fixos e dados históricos de preços de ativos financeiros. Os dados podem ser fornecidos por meio de **PDFs**, **arquivos CSV/Excel/TXT**, ou inseridos manualmente através de um formulário.
+**Presentation video:** [watch on YouTube](https://youtu.be/UNb9Th7K70s)
 
-## Funcionalidades
+## Features
 
-- **Simulação de Investimentos**: Realiza a simulação de aportes mensais fixos e calcula a evolução do patrimônio ao longo do tempo, com base nos preços de fechamento do ativo.
-- **Entrada de Dados**:
-  - **Upload de PDF**: Extração de dados de um arquivo PDF contendo informações sobre o investimento.
-  - **Upload de arquivos CSV/Excel/TXT**: Leitura de dados de arquivos CSV, Excel ou TXT.
-  - **Entrada Manual**: Preenchimento de um formulário diretamente na interface para fornecer os dados necessários.
-- **Exibição de Resultados**: Após a simulação, a aplicação apresenta gráficos interativos e um resumo numérico com informações sobre o patrimônio final, total investido, lucro e rentabilidade.
-- **Geração de Relatório**: A aplicação gera um relatório detalhado em formato `.txt`, que pode ser baixado pelo usuário.
+- **Monthly contribution simulation:** buys the asset with a fixed amount each month and tracks total invested and portfolio value.
+- **Three input options:** PDF upload, CSV, Excel, or TXT upload, or a manual form.
+- **Results view:** charts and a numeric summary with final value, total invested, profit, and return.
+- **Downloadable report:** exports the results as a `.txt` file.
 
-## Como Executar 
-# O site só roda para versões do python abaixo de 3.14.0 (recomendado que seja menor ou igual a versão 3.13.5)
+## Run it
 
-### 1. **Executando o Backtest com PDF**
-   - Prepare um arquivo PDF com as seguintes informações:
-     - **Ticket**: O código do ativo (ex: PETR4.SA).
-     - **Data de início**: A data de início do período de simulação (formato: YYYY-MM-DD).
-     - **Data final**: A data de término do período de simulação (formato: YYYY-MM-DD).
-     - **Aporte (R$)**: O valor a ser investido mensalmente.
-   - Faça o **upload** do PDF na aplicação.
-   - Clique em **"Executar Backtest"** para realizar a simulação.
-   Ex:
-  Ticket : 
-  PETR4.SA 
-  data de inicio: 
-  2015-09-08 
-  data final: 
-  2018-09-10 
-  aporte(R$): 
-  500.00
+Use Python 3.13 or earlier. The app does not run on Python 3.14.
 
-### 2. **Executando o Backtest com Arquivo CSV/Excel/TXT**
-   - Prepare um arquivo com as seguintes colunas:
-     - **ticker**: O código do ativo (ex: PETR4.SA).
-     - **investimento_inicial**: O valor inicial investido.
-     - **aporte_mensal**: O valor a ser aportado mensalmente.
-   - Faça o **upload** do arquivo CSV, Excel ou TXT na aplicação.
-   - Clique em **"Executar Backtest"** para realizar a simulação.
-   Ex:
+```bash
+git clone https://github.com/Vitor-Dias-Ferreira/backtest_coorte.git
+cd backtest_coorte
+pip install streamlit yfinance pandas PyPDF2 openpyxl
+python -m streamlit run BackTestCoorte.py
+```
+
+If the default port is busy, add `--server.port 8504`.
+
+## Input formats
+
+The app reads these field names in Portuguese.
+
+### PDF
+
+The file should contain these fields:
+
+```text
+Ticket:
+PETR4.SA
+data de inicio:
+2015-09-08
+data final:
+2018-09-10
+aporte(R$):
+500.00
+```
+
+### CSV, Excel, or TXT
+
+```csv
 ticker,investimento_inicial,aporte_mensal,data_inicial,data_final
 PETR4.SA,10000,500,2015-09-08,2018-09-10
 ITUB4.SA,5000,300,2016-01-01,2020-01-01
-VALE3.SA,20000,1000,2017-05-15,2022-05-15
-B3SA3.SA,15000,700,2018-07-20,2023-07-20
+```
 
+### Manual form
 
+Enter the ticker (such as `PETR4.SA`), start date, end date, and monthly amount, using dates in `YYYY-MM-DD` format.
 
+## How the simulation works
 
-### 3. **Executando o Backtest Manualmente**
-   - Insira os dados manualmente:
-     - **Ticker**: O código do ativo (ex: PETR4.SA).
-     - **Data inicial**: A data de início do período de simulação (formato: YYYY-MM-DD).
-     - **Data final**: A data de término do período de simulação (formato: YYYY-MM-DD).
-     - **Aporte Mensal (R$)**: O valor a ser investido mensalmente.
-   - Clique em **"Executar"** para realizar a simulação.
+On each contribution date, the app finds the first available trading day, buys the asset at that day's closing price, and records the total invested and portfolio value.
 
-## Como Rodar o Projeto
+## Limitations
 
-### 1. **Instalando Dependências**
+- **Single asset:** each simulation covers one ticker at a time.
+- **No benchmark:** results are not compared with an index or a risk-free rate.
+- **No costs:** taxes and brokerage fees are not included.
+- **Valuation dates:** portfolio value is recorded on contribution dates, so the last value may be earlier than the selected end date.
+- **Data source:** results depend on the prices returned by Yahoo Finance.
 
-Primeiro, você precisa instalar as dependências necessárias. Para isso, basta rodar o seguinte comando no terminal:
+This project is educational and is not investment advice.
 
-pip install yfinance pandas streamlit PyPDF2
+## Team
 
-### 2. **Importando Bibliotecas**
-
-import yfinance as yf  
-import pandas as pd 
-import streamlit as st  
-import PyPDF2  
-import re 
-import io  
-import time  
-
-### 3. **Executando o código no terminal**
-Entre no diretório(pasta) em que o arquivo está instalado atraves do comando "cd ..."
-Execute o codigo :
- 
-streamlit run app.py (App é o nome generico do arquivo do Backtest)
-Se não der certo , tente:
-python -m streamlit run app.py
-se não der certo , tente:
-streamlit run app.py --server.port 8504
-
-
------
-
-### Link para video de apresentação:
-
-https://youtu.be/UNb9Th7K70s?si=kd9iOSqOcP5EvGiX
+Vitor Dias Ferreira, Mariana Vitoria Martins de Miranda, and Adryann Henrique Oliveira Olivatti.
