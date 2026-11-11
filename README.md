@@ -2,72 +2,72 @@
 
 An interactive Streamlit app that simulates fixed monthly investments in a stock using historical Yahoo Finance prices. Enter a ticker, a period, and a monthly amount, and the app shows how the portfolio would have grown.
 
-> **Language note:** this was a university team project in Brazil, so the app's interface and code are in Portuguese.
+> **Language note:** this started as a university team project in Brazil, with the interface and code in Portuguese. Both are now in English; the input files still accept the original Portuguese field names.
 
 **Presentation video:** [watch on YouTube](https://youtu.be/UNb9Th7K70s)
 
 ## Features
 
-- **Monthly contribution simulation:** buys the asset with a fixed amount each month and tracks total invested and portfolio value.
-- **Three input options:** PDF upload, CSV, Excel, or TXT upload, or a manual form.
-- **Results view:** charts and a numeric summary with final value, total invested, profit, and return.
-- **Downloadable report:** exports the results as a `.txt` file.
+- **Monthly contribution simulation:** buys the asset with a fixed amount each month, plus an optional initial investment, and tracks the total invested and the portfolio value every trading day.
+- **Benchmarks:** runs the same contributions, on the same schedule, in the **Ibovespa** and in the **CDI** (Brazil's interbank rate, from the Central Bank of Brazil), so you can see whether the stock beat the market and the risk-free alternative.
+- **Annualized return (IRR):** a money-weighted return that accounts for when each contribution was made, which a simple "profit / invested" ratio does not.
+- **Dividends, your choice:** by default, prices are adjusted for dividends and splits (total return, as if dividends were reinvested). Turn the option off to see the price change only.
+- **Three input options:** a form, a PDF, or a CSV, Excel, or TXT file with one backtest per row.
+- **Downloadable report:** a `.txt` summary, generated in your browser.
 
 ## Run it
-
-Use Python 3.13 or earlier. The app does not run on Python 3.14.
 
 ```bash
 git clone https://github.com/Vitor-Dias-Ferreira/backtest_coorte.git
 cd backtest_coorte
-pip install streamlit yfinance pandas PyPDF2 openpyxl
+pip install -r requirements.txt
 python -m streamlit run BackTestCoorte.py
 ```
 
-If the default port is busy, add `--server.port 8504`.
+Tested with Python 3.14 and Streamlit 1.67. If the default port is busy, add `--server.port 8504`.
 
 ## Input formats
 
-The app reads these field names in Portuguese.
+Field names work in English or in Portuguese.
 
 ### PDF
 
-The file should contain these fields:
-
 ```text
-Ticket:
-PETR4.SA
-data de inicio:
-2015-09-08
-data final:
-2018-09-10
-aporte(R$):
-500.00
+Ticker: PETR4.SA
+Start date: 2015-09-08
+End date: 2018-09-10
+Monthly contribution: 500.00
+Initial investment: 1,000.00
 ```
 
-### CSV, Excel, or TXT
+Dates can be `YYYY-MM-DD` or `DD/MM/YYYY`. Amounts can be written as `1500`, `1,500.00`, or `1.500,00`.
+
+### CSV, Excel, or TXT (tab-separated)
 
 ```csv
-ticker,investimento_inicial,aporte_mensal,data_inicial,data_final
-PETR4.SA,10000,500,2015-09-08,2018-09-10
-ITUB4.SA,5000,300,2016-01-01,2020-01-01
+ticker,start_date,end_date,monthly_contribution,initial_investment
+PETR4.SA,2015-09-08,2018-09-10,500,10000
+ITUB4.SA,2016-01-01,2020-01-01,300,5000
 ```
 
-### Manual form
+The Portuguese column names (`aporte_mensal`, `investimento_inicial`, `data_inicial`, `data_final`) also work. `initial_investment` is optional.
 
-Enter the ticker (such as `PETR4.SA`), start date, end date, and monthly amount, using dates in `YYYY-MM-DD` format.
+### Form
+
+Enter the ticker (such as `PETR4.SA`), the dates, the monthly contribution, and, optionally, an initial investment.
 
 ## How the simulation works
 
-On each contribution date, the app finds the first available trading day, buys the asset at that day's closing price, and records the total invested and portfolio value.
+1. The first purchase happens on the first trading day on or after the start date, with the initial investment plus the first monthly contribution.
+2. Each following month, the app buys on the first trading day of the month, at that day's closing price.
+3. The portfolio is valued on every trading day until the end date, so the final value uses the last available price, not the last purchase date.
+4. The benchmarks receive exactly the same amounts on the same schedule.
 
 ## Limitations
 
-- **Single asset:** each simulation covers one ticker at a time.
-- **No benchmark:** results are not compared with an index or a risk-free rate.
 - **No costs:** taxes and brokerage fees are not included.
-- **Valuation dates:** portfolio value is recorded on contribution dates, so the last value may be earlier than the selected end date.
-- **Data source:** results depend on the prices returned by Yahoo Finance.
+- **One asset per backtest:** each row or form run simulates a single ticker (plus the benchmarks).
+- **Data sources:** results depend on the prices returned by Yahoo Finance and on the Central Bank of Brazil's CDI series.
 
 This project is educational and is not investment advice.
 
